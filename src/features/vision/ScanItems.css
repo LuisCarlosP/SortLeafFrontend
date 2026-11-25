@@ -1,0 +1,3 @@
+.sl-scan-items { display: grid; gap: .6rem; padding: 0; margin: .8rem 0; list-style: none; }
+.sl-scan-items li { display: grid; gap: .2rem; border-inline-start: 2px solid currentColor; padding-inline-start: .8rem; }
+.sl-scan-items span { font-size: .92em; }

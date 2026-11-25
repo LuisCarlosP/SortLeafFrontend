@@ -1,0 +1,315 @@
+.sl-auth-shell {
+  display: grid;
+  grid-template-columns: 43% 57%;
+  min-height: 100dvh;
+  background: #fbfcf8;
+  color: var(--sl-ink);
+  font-family: var(--sl-font-body);
+}
+.sl-auth-story {
+  background: #163b2d;
+  color: #f7f8f2;
+  padding: 42px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 60px;
+}
+.sl-auth-story > a {
+  width: fit-content;
+}
+.sl-auth-story > a img {
+  object-fit: contain;
+}
+.sl-auth-story__symbol {
+  display: grid;
+  place-content: center;
+  width: 82px;
+  height: 82px;
+  border: 1px solid #537747;
+  border-radius: 50%;
+  color: var(--sl-lime);
+  margin-bottom: 32px;
+}
+.sl-auth-story > div > p:first-of-type {
+  font-size: 0.625rem;
+  letter-spacing: 0.11em;
+  color: #bacaae;
+  font-weight: 600;
+}
+.sl-auth-story h2 {
+  font: 400 clamp(2.5rem, 3.7vw, 4.2rem) / 1.05 var(--sl-font-display);
+  letter-spacing: -0.04em;
+  margin: 24px 0;
+}
+.sl-auth-story h2 em {
+  font-style: normal;
+  color: var(--sl-lime);
+}
+.sl-auth-story > div > p:last-of-type {
+  font-size: 0.875rem;
+  line-height: 1.8;
+  max-width: 310px;
+  color: #c2d0b8;
+}
+.sl-auth-story > div > a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #eff6e4;
+  font-size: 0.75rem;
+  margin-top: 35px;
+  text-underline-offset: 6px;
+}
+.sl-auth-story > small {
+  font-size: 0.6875rem;
+  color: #c2d0b8;
+}
+.sl-auth-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.sl-auth-main > nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 38px;
+}
+.sl-auth-main > nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #5d7252;
+  text-decoration: none;
+  font-size: 0.75rem;
+}
+.sl-auth-main > nav button {
+  border: 1px solid #cbd7c1;
+  background: transparent;
+  min-width: 44px;
+  min-height: 40px;
+  border-radius: 5px;
+  color: var(--sl-forest);
+  font: 600 0.75rem var(--sl-font-body);
+  cursor: pointer;
+}
+.sl-auth-main > main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 25px 45px;
+}
+.sl-auth-main > footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 28px 38px;
+  color: #737e69;
+  font-size: 0.6875rem;
+}
+.sl-auth-main > footer a {
+  color: inherit;
+  text-underline-offset: 3px;
+}
+.sl-auth-shell .auth-page {
+  min-height: 0;
+  width: 100%;
+  padding: 0;
+  overflow: visible;
+  background: none;
+  display: block;
+}
+.sl-auth-shell .auth-container {
+  max-width: 410px;
+  margin: auto;
+  display: block;
+}
+.sl-auth-shell
+  :is(
+    .login-form,
+    .register-form,
+    .forgot-form,
+    .reset-form,
+    .register-success,
+    .forgot-success,
+    .reset-success,
+    .callback-content
+  ) {
+  width: 100%;
+  max-width: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  background: transparent;
+}
+.sl-auth-shell
+  :is(
+    .login-form-header,
+    .register-form-header,
+    .forgot-form-header,
+    .reset-form-header
+  ) {
+  text-align: left;
+  margin-bottom: 28px;
+}
+.sl-auth-shell
+  :is(
+    .login-title,
+    .register-title,
+    .forgot-title,
+    .reset-title,
+    .success-title
+  ) {
+  font: 500 2.2rem/1.1 var(--sl-font-display);
+  color: var(--sl-ink);
+  letter-spacing: -0.035em;
+  margin: 0 0 12px;
+}
+.sl-auth-shell
+  :is(
+    .login-subtitle,
+    .register-subtitle,
+    .forgot-subtitle,
+    .reset-subtitle,
+    .success-message
+  ) {
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: #6b7761;
+}
+.sl-auth-shell
+  :is(
+    .login-form-fields,
+    .register-form-fields,
+    .forgot-form-fields,
+    .reset-form-fields
+  ) {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  margin-bottom: 23px;
+}
+.sl-auth-shell .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.sl-auth-shell
+  :is(
+    .btn,
+    .login-button,
+    .register-button,
+    .forgot-button,
+    .reset-button,
+    .success-button,
+    .back-button
+  ) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background: var(--sl-forest);
+  color: white;
+  border: 1px solid var(--sl-forest);
+  min-height: 48px;
+  border-radius: 6px;
+  box-shadow: none;
+  font: 600 0.8125rem var(--sl-font-body);
+  padding: 12px 20px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.sl-auth-shell .btn:hover {
+  background: #173f2d;
+  transform: none;
+  box-shadow: none;
+}
+.sl-auth-shell .btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.sl-auth-shell :is(.login-footer, .register-footer, .forgot-footer) {
+  font-size: 0.75rem;
+  line-height: 1.8;
+  color: #6b7761;
+  margin-top: 20px;
+  text-align: center;
+}
+.sl-auth-shell :is(.auth-link, .forgot-password-link) {
+  color: var(--sl-forest);
+  font-size: 0.75rem;
+  text-underline-offset: 4px;
+}
+.sl-auth-shell .auth-error-message {
+  background: #fbebe7;
+  color: #943d2b;
+  border: 0;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  text-align: left;
+  padding: 13px 15px;
+}
+.sl-auth-shell .success-icon {
+  color: var(--sl-forest);
+  font-size: 2.7rem;
+  margin-bottom: 24px;
+}
+.sl-auth-shell :is(a, button, input):focus-visible {
+  outline: 3px solid var(--sl-iris);
+  outline-offset: 3px;
+}
+.sl-auth-shell .strength-label {
+  font-size: 0.625rem;
+}
+.sl-auth-shell .password-requirements {
+  font-size: 0.6875rem;
+}
+.sl-auth-shell .terms-checkbox {
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+.sl-auth-shell .callback-content {
+  text-align: center;
+}
+.sl-auth-shell .callback-icon {
+  color: var(--sl-forest);
+  font-size: 2.5rem;
+}
+.sl-auth-shell .callback-message {
+  font-size: 0.875rem;
+  margin-top: 20px;
+}
+@media (max-width: 950px) {
+  .sl-auth-story {
+    padding: 35px 30px;
+  }
+  .sl-auth-main > main {
+    padding-inline: 30px;
+  }
+}
+@media (max-width: 700px) {
+  .sl-auth-shell {
+    grid-template-columns: 1fr;
+  }
+  .sl-auth-story {
+    display: none;
+  }
+  .sl-auth-main > main {
+    padding: 25px 24px 40px;
+  }
+  .sl-auth-main > nav {
+    padding: 22px 24px;
+  }
+  .sl-auth-main > footer {
+    padding: 24px;
+  }
+  .sl-auth-shell .auth-container {
+    max-width: 430px;
+  }
+  .sl-auth-shell
+    :is(.login-title, .register-title, .forgot-title, .reset-title) {
+    font-size: 2rem;
+  }
+}

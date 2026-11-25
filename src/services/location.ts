@@ -11,6 +11,7 @@ export interface RecyclingPoint {
   address?: string;
   types: string[]; // ['plastic', 'glass', 'paper', 'metal', 'cardboard', 'electronics', 'batteries']
   openingHours?: string;
+  opening_hours?: string;
   phone?: string;
   website?: string;
   distance?: number; // in meters
@@ -26,6 +27,8 @@ export interface RecyclingPointsResponse {
   success: boolean;
   count: number;
   radius: number;
+  partial: boolean;
+  catalog_date?: string | null;
   center: Coordinates;
   points: RecyclingPoint[];
 }
@@ -43,7 +46,6 @@ export const getCurrentPosition = (): Promise<Coordinates> => {
     }
 
     let bestPosition: GeolocationPosition | null = null;
-    let watchId: number;
 
     const timeoutId = setTimeout(() => {
       navigator.geolocation.clearWatch(watchId);
@@ -57,7 +59,7 @@ export const getCurrentPosition = (): Promise<Coordinates> => {
       }
     }, 10000);
 
-    watchId = navigator.geolocation.watchPosition(
+    const watchId = navigator.geolocation.watchPosition(
       (position) => {
         if (!bestPosition || position.coords.accuracy < bestPosition.coords.accuracy) {
           bestPosition = position;
@@ -136,18 +138,20 @@ export const formatDistance = (meters: number): string => {
   return `${(meters / 1000).toFixed(1)} km`;
 };
 
+export const MAP_POINT_LIMIT = 10;
+
 // Fetch recycling points from backend API
 export const fetchRecyclingPoints = async (
   latitude: number,
   longitude: number,
-  radiusMeters: number = 2000,
-  types?: string[]
-): Promise<RecyclingPoint[]> => {
+  types?: string[],
+  signal?: AbortSignal
+): Promise<RecyclingPointsResponse> => {
   // Build query params
   const params = new URLSearchParams({
     latitude: latitude.toString(),
     longitude: longitude.toString(),
-    radius: radiusMeters.toString(),
+    limit: String(MAP_POINT_LIMIT),
   });
 
   if (types && types.length > 0) {
@@ -155,6 +159,7 @@ export const fetchRecyclingPoints = async (
   }
 
   const response = await fetch(`${API_URL}/location/recycling-points?${params}`, {
+    signal,
     headers: {
       'X-API-Key': API_KEY,
     },
@@ -168,10 +173,13 @@ export const fetchRecyclingPoints = async (
   const data: RecyclingPointsResponse = await response.json();
 
 
-  return data.points.map(point => ({
-    ...point,
-    openingHours: point.openingHours || (point as any).opening_hours,
-  }));
+  return {
+    ...data,
+    points: data.points.map(point => ({
+      ...point,
+      openingHours: point.openingHours || point.opening_hours,
+    })),
+  };
 };
 
 export const getMaterialIcon = (type: string): string => {

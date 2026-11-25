@@ -20,9 +20,8 @@ import {
   faEye,
   faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '../../../context/AuthContext';
+import { useAuth } from '../../../context/auth-context';
 import { AuthInput } from '../../../components/auth';
-import PageBackground from '../../../components/common/PageBackground/PageBackground';
 import { Loading } from '../../../components/common/LoadingError/LoadingError';
 import { authService } from '../../../services/auth';
 import './ProfilePage.css';
@@ -137,7 +136,7 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
 export default function ProfilePage({ language }: ProfilePageProps) {
   const t = translations[language];
-  const { user, isAuthenticated, isLoading, updateProfile } = useAuth();
+  const { user, isAuthenticated, isLoading, updateProfile, avatarUrl, uploadProfilePicture } = useAuth();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -148,8 +147,8 @@ export default function ProfilePage({ language }: ProfilePageProps) {
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('');
-  const [profilePicture, setProfilePicture] = useState<string | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [removePicture, setRemovePicture] = useState(false);
+  const previewUrl = removePicture ? null : avatarUrl;
 
   // Password Form state
   const [currentPassword, setCurrentPassword] = useState('');
@@ -180,16 +179,14 @@ export default function ProfilePage({ language }: ProfilePageProps) {
     confirmPassword?: string;
   }>({});
 
-  // Initialize form with user data
+  const savedName = user?.profile?.name ?? '';
+  const savedLastName = user?.profile?.last_name ?? '';
+  const savedPhone = user?.profile?.telephone ?? '';
   useEffect(() => {
-    if (user?.profile) {
-      setName(user.profile.name || '');
-      setLastName(user.profile.last_name || '');
-      setPhone(user.profile.telephone || '');
-      setProfilePicture(user.profile.profile_picture || null);
-      setPreviewUrl(user.profile.profile_picture || null);
-    }
-  }, [user]);
+    setName(savedName);
+    setLastName(savedLastName);
+    setPhone(savedPhone);
+  }, [savedName, savedLastName, savedPhone]);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -222,7 +219,7 @@ export default function ProfilePage({ language }: ProfilePageProps) {
 
     if (phone.trim()) {
       // Basic phone validation - allows optional + and 8-15 digits
-      const cleanedPhone = phone.replace(/[\s\-\(\)]/g, '');
+      const cleanedPhone = phone.replace(/[\s\-()]/g, '');
       if (!/^\+?\d{8,15}$/.test(cleanedPhone)) {
         newErrors.phone = t.phoneInvalid;
       }
@@ -238,6 +235,7 @@ export default function ProfilePage({ language }: ProfilePageProps) {
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    e.target.value = "";
     if (!file) return;
 
     // Validate file type
@@ -252,33 +250,20 @@ export default function ProfilePage({ language }: ProfilePageProps) {
       return;
     }
 
-    // Create preview
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreviewUrl(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-
-    // Upload file
     setIsUploading(true);
     setErrorMessage(null);
     try {
-      const uploadedUrl = await authService.uploadProfilePicture(file);
-      setProfilePicture(uploadedUrl);
-      setPreviewUrl(uploadedUrl);
-    } catch (error) {
-      console.error('Upload error:', error);
+      await uploadProfilePicture(file);
+      setRemovePicture(false);
+    } catch {
       setErrorMessage(t.uploadError);
-      // Revert preview
-      setPreviewUrl(profilePicture);
     } finally {
       setIsUploading(false);
     }
   };
 
   const handleRemovePhoto = () => {
-    setProfilePicture(null);
-    setPreviewUrl(null);
+    setRemovePicture(true);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -298,9 +283,9 @@ export default function ProfilePage({ language }: ProfilePageProps) {
         name: name.trim(),
         last_name: lastName.trim(),
         telephone: phone.trim() || undefined,
-        // Send empty string to remove photo, or the URL to keep/update it
-        profile_picture: profilePicture === null ? '' : profilePicture,
+        ...(removePicture ? { profile_picture: null } : {}),
       });
+      setRemovePicture(false);
       setSuccessMessage(t.successMessage);
     } catch (error) {
       console.error('Update error:', error);
@@ -381,7 +366,6 @@ export default function ProfilePage({ language }: ProfilePageProps) {
 
   return (
     <div className="auth-page profile-page">
-      <PageBackground />
       <div className="profile-container">
         {/* Header */}
         <div className="profile-header">
@@ -457,6 +441,7 @@ export default function ProfilePage({ language }: ProfilePageProps) {
               <button
                 type="button"
                 className="change-photo-button"
+                aria-label={t.changePhoto}
                 onClick={handlePhotoClick}
                 disabled={isUploading}
               >
@@ -479,7 +464,7 @@ export default function ProfilePage({ language }: ProfilePageProps) {
               >
                 {t.changePhoto}
               </button>
-              {previewUrl && (
+              {!removePicture && user?.profile?.profile_picture && (
                 <button
                   type="button"
                   className="photo-action-btn remove"
@@ -579,7 +564,7 @@ export default function ProfilePage({ language }: ProfilePageProps) {
                   type="button"
                   className="password-toggle"
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                  tabIndex={-1}
+                  aria-label={language === 'es' ? 'Mostrar u ocultar contraseña' : 'Show or hide password'}
                 >
                   <FontAwesomeIcon icon={showCurrentPassword ? faEyeSlash : faEye} />
                 </button>
@@ -601,7 +586,7 @@ export default function ProfilePage({ language }: ProfilePageProps) {
                   type="button"
                   className="password-toggle"
                   onClick={() => setShowNewPassword(!showNewPassword)}
-                  tabIndex={-1}
+                  aria-label={language === 'es' ? 'Mostrar u ocultar contraseña' : 'Show or hide password'}
                 >
                   <FontAwesomeIcon icon={showNewPassword ? faEyeSlash : faEye} />
                 </button>
@@ -623,7 +608,7 @@ export default function ProfilePage({ language }: ProfilePageProps) {
                   type="button"
                   className="password-toggle"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  tabIndex={-1}
+                  aria-label={language === 'es' ? 'Mostrar u ocultar contraseña' : 'Show or hide password'}
                 >
                   <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
                 </button>

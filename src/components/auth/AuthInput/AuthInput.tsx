@@ -38,6 +38,8 @@ export default function AuthInput({
           id={inputId}
           className={`auth-input ${icon ? 'has-icon' : ''} ${showPasswordToggle ? 'has-toggle' : ''}`}
           type={inputType}
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? `${inputId}-error` : undefined}
           {...props}
         />
         {showPasswordToggle && (
@@ -45,14 +47,14 @@ export default function AuthInput({
             type="button"
             className="password-toggle"
             onClick={() => setShowPassword(!showPassword)}
-            aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-            tabIndex={-1}
+            aria-label={document.documentElement.lang === 'en' ? (showPassword ? 'Hide password' : 'Show password') : (showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña')}
+            aria-pressed={showPassword}
           >
             <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
           </button>
         )}
       </div>
-      {error && <span className="auth-input-error">{error}</span>}
+      {error && <span className="auth-input-error" id={`${inputId}-error`}>{error}</span>}
     </div>
   );
 }

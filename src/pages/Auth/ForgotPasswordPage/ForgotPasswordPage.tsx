@@ -7,12 +7,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEnvelope,
   faSpinner,
-  faCheckCircle,
-  faArrowLeft,
 } from '@fortawesome/free-solid-svg-icons';
-import { AuthHeader, AuthInput } from '../../../components/auth';
-import { useAuth } from '../../../context/AuthContext';
-import PageBackground from '../../../components/common/PageBackground/PageBackground';
+import { AuthInput } from '../../../components/auth';
+import { useAuth } from '../../../context/auth-context';
+import EmailSent from '../../../components/auth/EmailSent';
 import './ForgotPasswordPage.css';
 
 interface ForgotPasswordPageProps {
@@ -27,10 +25,8 @@ const translations = {
     emailPlaceholder: 'tu@email.com',
     sendButton: 'Enviar Enlace',
     sending: 'Enviando...',
-    successTitle: '¡Correo Enviado!',
     successMessage:
       'Si el correo existe en nuestro sistema, recibirás un enlace para restablecer tu contraseña.',
-    backToLogin: 'Volver al Login',
     rememberPassword: '¿Recordaste tu contraseña?',
     login: 'Iniciar Sesión',
   },
@@ -41,10 +37,8 @@ const translations = {
     emailPlaceholder: 'your@email.com',
     sendButton: 'Send Link',
     sending: 'Sending...',
-    successTitle: 'Email Sent!',
     successMessage:
       'If the email exists in our system, you will receive a link to reset your password.',
-    backToLogin: 'Back to Login',
     rememberPassword: 'Remember your password?',
     login: 'Sign In',
   },
@@ -78,18 +72,8 @@ export default function ForgotPasswordPage({ language }: ForgotPasswordPageProps
   if (isSuccess) {
     return (
       <div className="auth-page forgot-password-page">
-        <PageBackground />
         <div className="auth-container">
-          <AuthHeader />
-          <div className="forgot-success">
-            <FontAwesomeIcon icon={faCheckCircle} className="success-icon" />
-            <h2 className="success-title">{t.successTitle}</h2>
-            <p className="success-message">{t.successMessage}</p>
-            <Link to="/auth/login" className="btn btn-primary back-button">
-              <FontAwesomeIcon icon={faArrowLeft} />
-              {t.backToLogin}
-            </Link>
-          </div>
+          <EmailSent language={language}>{t.successMessage}</EmailSent>
         </div>
       </div>
     );
@@ -97,12 +81,10 @@ export default function ForgotPasswordPage({ language }: ForgotPasswordPageProps
 
   return (
     <div className="auth-page forgot-password-page">
-      <PageBackground />
       <div className="auth-container">
-        <AuthHeader />
         <form className="forgot-form" onSubmit={handleSubmit}>
           <div className="forgot-form-header">
-            <h2 className="forgot-title">{t.title}</h2>
+            <h1 className="forgot-title">{t.title}</h1>
             <p className="forgot-subtitle">{t.subtitle}</p>
           </div>
 

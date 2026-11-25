@@ -6,6 +6,14 @@
   width: 100%;
 }
 
+.sl-shell .auth-input { border: 1px solid #bccbb2; border-radius: 6px; min-height: 46px; color: var(--sl-ink); font-family: var(--sl-font-body); font-size: .875rem; box-shadow: none; }
+.sl-shell .auth-input:focus { border-color: var(--sl-forest); outline: 2px solid #d6e7c5; outline-offset: 1px; box-shadow: none; }
+.sl-shell .auth-input-label { color: #4d6245; font-size: .75rem; }
+.sl-shell .auth-input-icon { color: #86977a; font-size: .875rem; }
+.sl-shell .password-toggle { min-width: 44px; min-height: 44px; right: 0; color: #6c805f; }
+.sl-shell .auth-input-error { font-size: .6875rem; color: #9c4935; }
+.sl-shell .auth-input::placeholder { color: #89947f; }
+
 .auth-input-label {
   font-size: 0.8rem;
   font-weight: 600;

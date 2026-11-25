@@ -1,5 +1,5 @@
 /**
- * Authentication Service for TrashIA
+ * Authentication Service for SortLeaf
  * Handles API calls and token management
  */
 import type {
@@ -90,13 +90,13 @@ export const authService = {
   /**
    * Register a new user
    */
-  async register(data: RegisterRequest): Promise<AuthResponse> {
+  async register(data: RegisterRequest): Promise<MessageResponse> {
     const response = await fetch(`${API_URL}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-    return handleResponse<AuthResponse>(response);
+    return handleResponse<MessageResponse>(response);
   },
 
   /**
@@ -137,9 +137,10 @@ export const authService = {
   /**
    * Get current authenticated user
    */
-  async getCurrentUser(): Promise<User> {
+  async getCurrentUser(accessToken?: string, signal?: AbortSignal): Promise<User> {
     const response = await fetch(`${API_URL}/auth/me`, {
-      headers: getAuthHeaders(),
+      headers: accessToken ? { Authorization: "Bearer " + accessToken } : getAuthHeaders(),
+      signal,
     });
     return handleResponse<User>(response);
   },
@@ -225,8 +226,16 @@ export const authService = {
       body: formData,
     });
     
-    const data = await handleResponse<{ url: string; message: string }>(response);
-    return data.url;
+    const data = await handleResponse<{ path: string; message: string }>(response);
+    return data.path;
+  },
+
+  async getProfilePicture(accessToken: string, signal: AbortSignal): Promise<Blob> {
+    const response = await fetch(API_URL + '/auth/profile/picture', {
+      headers: { Authorization: 'Bearer ' + accessToken }, signal, cache: 'no-store',
+    });
+    if (!response.ok) throw new Error('avatar_unavailable');
+    return response.blob();
   },
 
   /**
@@ -244,5 +253,27 @@ export const authService = {
     return handleResponse<MessageResponse>(response);
   },
 };
+
+let renewal: Promise<Tokens> | undefined;
+
+export function renewAccountTokens(): Promise<Tokens> {
+  if (renewal) return renewal;
+  const previous = getStoredTokens();
+  const userId = getStoredUser()?.id;
+  if (!previous || !userId) return Promise.reject(new Error("account_required"));
+  const refresh = async (): Promise<Tokens> => {
+    const current = getStoredTokens();
+    if (!current || getStoredUser()?.id !== userId) throw new Error("session_changed");
+    if (current.refresh_token !== previous.refresh_token) return current;
+    const next = await authService.refreshTokens(current.refresh_token);
+    if (getStoredTokens()?.refresh_token !== current.refresh_token || getStoredUser()?.id !== userId)
+      throw new Error("session_changed");
+    storeTokens(next);
+    return next;
+  };
+  const job = navigator.locks ? navigator.locks.request("sortleaf-account-refresh", refresh) : refresh();
+  renewal = Promise.resolve(job).then(async result => await result).finally(() => { renewal = undefined; });
+  return renewal;
+}
 
 export default authService;

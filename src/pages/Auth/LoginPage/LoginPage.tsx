@@ -3,9 +3,8 @@
  */
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { AuthHeader, LoginForm } from '../../../components/auth';
-import { useAuth } from '../../../context/AuthContext';
-import PageBackground from '../../../components/common/PageBackground/PageBackground';
+import { LoginForm } from '../../../components/auth';
+import { useAuth } from '../../../context/auth-context';
 import { Loading } from '../../../components/common/LoadingError/LoadingError';
 import './LoginPage.css';
 
@@ -41,9 +40,7 @@ export default function LoginPage({ language }: LoginPageProps) {
 
   return (
     <div className="auth-page login-page">
-      <PageBackground />
       <div className="auth-container">
-        <AuthHeader />
         <LoginForm language={language} onSuccess={handleLoginSuccess} />
       </div>
     </div>

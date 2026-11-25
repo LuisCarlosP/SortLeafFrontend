@@ -2,7 +2,7 @@
  * RegisterForm - User registration form component
  */
 import { useState, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEnvelope,
@@ -10,11 +10,12 @@ import {
   faUser,
   faPhone,
   faSpinner,
-  faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import AuthInput from '../AuthInput/AuthInput';
 import PasswordStrength from '../PasswordStrength/PasswordStrength';
-import { useAuth } from '../../../context/AuthContext';
+import { useAuth } from '../../../context/auth-context';
+import EmailSent from '../EmailSent';
+import ResendVerification from '../ResendVerification';
 import './RegisterForm.css';
 
 interface RegisterFormProps {
@@ -24,7 +25,7 @@ interface RegisterFormProps {
 const translations = {
   es: {
     title: 'Crear Cuenta',
-    subtitle: 'Únete a la comunidad TrashIA',
+    subtitle: 'Únete a la comunidad SortLeaf',
     name: 'Nombre',
     namePlaceholder: 'Tu nombre',
     lastName: 'Apellido',
@@ -42,15 +43,14 @@ const translations = {
     hasAccount: '¿Ya tienes cuenta?',
     login: 'Inicia sesión',
     passwordMismatch: 'Las contraseñas no coinciden',
-    successTitle: '¡Registro exitoso!',
     successMessage:
-      'Te hemos enviado un correo de verificación. Por favor, revisa tu bandeja de entrada.',
-    continueButton: 'Continuar al Login',
-    genericError: 'Error al registrarse. Intenta de nuevo.',
+      'Usa el enlace del correo para verificar tu cuenta. Revisa la bandeja de entrada de',
+    rateLimit: 'Espera un momento antes de solicitar otro correo.',
+    genericError: 'No pudimos iniciar el registro. Inténtalo de nuevo.',
   },
   en: {
     title: 'Create Account',
-    subtitle: 'Join the TrashIA community',
+    subtitle: 'Join the SortLeaf community',
     name: 'First Name',
     namePlaceholder: 'Your first name',
     lastName: 'Last Name',
@@ -68,10 +68,9 @@ const translations = {
     hasAccount: 'Already have an account?',
     login: 'Sign in',
     passwordMismatch: 'Passwords do not match',
-    successTitle: 'Registration successful!',
     successMessage:
-      'We sent you a verification email. Please check your inbox.',
-    continueButton: 'Continue to Login',
+      'Use the link in the email to verify your account. Check the inbox for',
+    rateLimit: 'Wait a moment before requesting another email.',
     genericError: 'Registration failed. Please try again.',
   },
 };
@@ -79,7 +78,6 @@ const translations = {
 export default function RegisterForm({ language }: RegisterFormProps) {
   const t = translations[language];
   const { register, error, clearError } = useAuth();
-  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -121,9 +119,10 @@ export default function RegisterForm({ language }: RegisterFormProps) {
         password: formData.password,
         telephone: formData.telephone || undefined,
       });
+      setFormData(current => ({ ...current, password: "", confirmPassword: "" }));
       setIsSuccess(true);
     } catch (err) {
-      setLocalError(err instanceof Error ? err.message : t.genericError);
+      setLocalError(err instanceof Error && err.message === "verification_rate_limited" ? t.rateLimit : t.genericError);
     } finally {
       setIsLoading(false);
     }
@@ -132,17 +131,9 @@ export default function RegisterForm({ language }: RegisterFormProps) {
   // Success screen
   if (isSuccess) {
     return (
-      <div className="register-success">
-        <FontAwesomeIcon icon={faCheckCircle} className="success-icon" />
-        <h2 className="success-title">{t.successTitle}</h2>
-        <p className="success-message">{t.successMessage}</p>
-        <button
-          className="btn btn-primary success-button"
-          onClick={() => navigate('/auth/login')}
-        >
-          {t.continueButton}
-        </button>
-      </div>
+      <EmailSent language={language} extraAction={<ResendVerification email={formData.email} language={language} />}>
+        {t.successMessage} <strong>{formData.email}</strong>.
+      </EmailSent>
     );
   }
 
@@ -151,7 +142,7 @@ export default function RegisterForm({ language }: RegisterFormProps) {
   return (
     <form className="register-form" onSubmit={handleSubmit}>
       <div className="register-form-header">
-        <h2 className="register-title">{t.title}</h2>
+        <h1 className="register-title">{t.title}</h1>
         <p className="register-subtitle">{t.subtitle}</p>
       </div>
 

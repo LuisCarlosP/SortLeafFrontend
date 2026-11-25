@@ -11,7 +11,7 @@ import {
   faSignInAlt,
   faUserPlus,
 } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '../../../context/AuthContext';
+import { useAuth } from '../../../context/auth-context';
 import './UserMenu.css';
 
 interface UserMenuProps {
@@ -35,7 +35,7 @@ const translations = {
 
 export default function UserMenu({ language }: UserMenuProps) {
   const t = translations[language];
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout, avatarUrl } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -88,7 +88,6 @@ export default function UserMenu({ language }: UserMenuProps) {
 
   // Authenticated user view
   const displayName = user?.profile?.name || user?.email?.split('@')[0] || 'User';
-  const avatarUrl = user?.profile?.profile_picture;
   const initials = displayName.charAt(0).toUpperCase();
 
   return (

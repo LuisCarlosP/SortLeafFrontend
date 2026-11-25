@@ -1,0 +1,18 @@
+.sl-email-sent {
+  width: 100%;
+  max-width: 410px;
+  margin: auto;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.sl-email-sent .success-message { margin: 0 0 24px; }
+.sl-email-sent .sl-resend { margin-top: 12px; }
+.sl-email-sent .sl-resend button {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.sl-email-sent .sl-resend p { font-size: .8125rem; line-height: 1.6; }

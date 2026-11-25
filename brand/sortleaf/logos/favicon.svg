@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" role="img" aria-labelledby="title desc">
+<title id="title">SortLeaf favicon</title><desc id="desc">Marca lima sobre recuadro bosque; legible en pestañas claras y oscuras.</desc><rect x="0" y="0" width="32" height="32" rx="8" fill="#215C45"/><g transform="translate(1 1) scale(0.9375)">
+      <defs><mask id="favicon" x="0" y="0" width="32" height="32" maskUnits="userSpaceOnUse" style="mask-type:luminance">
+        <rect width="32" height="32" fill="white"/>
+        <path d="M1 22H14C26 22 6 10 18 10H31" fill="none" stroke="black" stroke-width="3.2"/>
+      </mask></defs>
+      <path d="M4 28V16C4 9.373 9.373 4 16 4H28V16C28 22.627 22.627 28 16 28Z" fill="#D6F66B" mask="url(#favicon)"/>
+    </g></svg>

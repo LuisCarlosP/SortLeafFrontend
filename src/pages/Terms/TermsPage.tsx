@@ -28,7 +28,7 @@ interface TermsPageProps {
 
 export default function TermsPage({ t }: TermsPageProps) {
     return (
-        <main className="terms-page">
+        <article className="terms-page">
             <div className="terms-container">
                 <header className="terms-header">
                     <h1>{t.termsTitle}</h1>
@@ -86,6 +86,6 @@ export default function TermsPage({ t }: TermsPageProps) {
                     </section>
                 </div>
             </div>
-        </main>
+        </article>
     )
 }

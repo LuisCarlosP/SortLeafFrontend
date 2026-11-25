@@ -1,10 +1,8 @@
 /**
- * Authentication Context for TrashIA
+ * Authentication Context for SortLeaf
  * Provides global auth state and methods
  */
 import {
-  createContext,
-  useContext,
   useState,
   useEffect,
   useCallback,
@@ -12,6 +10,7 @@ import {
 } from 'react';
 import {
   authService,
+  renewAccountTokens,
   storeTokens,
   storeUser,
   getStoredTokens,
@@ -26,6 +25,8 @@ import type {
   UpdateProfileRequest,
   MessageResponse,
 } from '../types/auth.types';
+import { usePrivateAvatar } from '../hooks/usePrivateAvatar';
+import { AuthContext } from './auth-context';
 
 // Initial state
 const initialState: AuthState = {
@@ -35,9 +36,6 @@ const initialState: AuthState = {
   isLoading: true,
   isEmailVerified: false,
 };
-
-// Create context
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Provider component
 interface AuthProviderProps {
@@ -57,25 +55,29 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (tokens && user) {
         try {
           // Validate stored token
-          await authService.validateToken();
+          const verified = await authService.getCurrentUser();
+          const activeTokens = getStoredTokens();
+          if (!activeTokens || (activeTokens.access_token !== tokens.access_token && getStoredUser()?.id !== verified.id)) return;
+          storeUser(verified);
           setState({
-            user,
-            tokens,
+            user: verified,
+            tokens: activeTokens,
             isAuthenticated: true,
             isLoading: false,
-            isEmailVerified: user.email_verified,
+            isEmailVerified: verified.email_verified,
           });
         } catch {
           // Token invalid, try to refresh
           try {
             if (tokens.refresh_token) {
-              const newTokens = await authService.refreshTokens(tokens.refresh_token);
+              await renewAccountTokens();
               const currentUser = await authService.getCurrentUser();
-              storeTokens(newTokens);
+              const activeTokens = getStoredTokens();
+              if (!activeTokens || getStoredUser()?.id !== currentUser.id) return;
               storeUser(currentUser);
               setState({
                 user: currentUser,
-                tokens: newTokens,
+                tokens: activeTokens,
                 isAuthenticated: true,
                 isLoading: false,
                 isEmailVerified: currentUser.email_verified,
@@ -85,6 +87,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             }
           } catch {
             // Refresh failed, clear storage
+            if (getStoredUser()?.id !== user.id) return;
             clearAuthStorage();
             setState({ ...initialState, isLoading: false });
           }
@@ -94,29 +97,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
     };
 
-    initAuth();
+    void initAuth();
+    const syncAccount = (event: StorageEvent): void => {
+      if (event.key === "auth_user" || event.key === null) window.location.reload();
+    };
+    window.addEventListener("storage", syncAccount);
+    return () => window.removeEventListener("storage", syncAccount);
   }, []);
-
-  // Auto-refresh tokens before expiry
-  useEffect(() => {
-    if (!state.tokens?.expires_at) return;
-
-    const expiresAt = state.tokens.expires_at * 1000; // Convert to ms
-    const refreshAt = expiresAt - 5 * 60 * 1000; // 5 minutes before expiry
-    const timeout = refreshAt - Date.now();
-
-    if (timeout > 0) {
-      const timerId = setTimeout(async () => {
-        try {
-          await refreshTokens();
-        } catch (err) {
-          console.error('Auto-refresh failed:', err);
-        }
-      }, timeout);
-
-      return () => clearTimeout(timerId);
-    }
-  }, [state.tokens]);
 
   // Login
   const login = useCallback(async (credentials: LoginRequest) => {
@@ -143,21 +130,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const register = useCallback(async (userData: RegisterRequest) => {
     try {
       setError(null);
-      const response = await authService.register(userData);
-
-      // Store user info (may not have valid tokens if email verification required)
-      if (response.tokens.access_token) {
-        storeTokens(response.tokens);
-      }
-      storeUser(response.user);
-
-      setState({
-        user: response.user,
-        tokens: response.tokens.access_token ? response.tokens : null,
-        isAuthenticated: !!response.tokens.access_token,
-        isLoading: false,
-        isEmailVerified: response.user.email_verified,
-      });
+      await authService.register(userData);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Error al registrarse';
       setError(message);
@@ -185,10 +158,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
       throw new Error('No refresh token available');
     }
 
-    const newTokens = await authService.refreshTokens(tokens.refresh_token);
-    storeTokens(newTokens);
+    const newTokens = await renewAccountTokens();
     setState((prev) => ({ ...prev, tokens: newTokens }));
   }, []);
+
+  // Auto-refresh tokens before expiry
+  useEffect(() => {
+    if (!state.tokens?.expires_at) return;
+
+    const expiresAt = state.tokens.expires_at * 1000; // Convert to ms
+    const refreshAt = expiresAt - 5 * 60 * 1000; // 5 minutes before expiry
+    const timeout = refreshAt - Date.now();
+
+    if (timeout > 0) {
+      const timerId = setTimeout(async () => {
+        try {
+          await refreshTokens();
+        } catch (err) {
+          console.error('Auto-refresh failed:', err);
+        }
+      }, timeout);
+
+      return () => clearTimeout(timerId);
+    }
+  }, [state.tokens, refreshTokens]);
 
   // Resend verification email
   const resendVerification = useCallback(async (email: string): Promise<MessageResponse> => {
@@ -208,23 +201,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
     []
   );
 
-  // Update profile
-  const updateProfile = useCallback(async (data: UpdateProfileRequest) => {
-    const updatedProfile = await authService.updateProfile(data);
-    setState((prev) => ({
-      ...prev,
-      user: prev.user
-        ? {
-            ...prev.user,
-            profile: updatedProfile,
-          }
-        : null,
-    }));
-    // Update stored user
-    const currentUser = getStoredUser();
-    if (currentUser) {
-      storeUser({ ...currentUser, profile: updatedProfile });
-    }
+  const [avatarRevision, setAvatarRevision] = useState(0);
+  const avatarUrl = usePrivateAvatar(state.user, state.tokens?.access_token, avatarRevision);
+
+  const updateProfile = useCallback(async (data: UpdateProfileRequest): Promise<void> => {
+    const profile = await authService.updateProfile(data);
+    const current = getStoredUser();
+    if (!current || current.id !== profile.id) return;
+    storeUser({ ...current, profile });
+    setState(prev => prev.user?.id === profile.id ? { ...prev, user: { ...prev.user, profile } } : prev);
+  }, []);
+
+  const uploadProfilePicture = useCallback(async (file: File): Promise<void> => {
+    const owner = getStoredUser()?.id;
+    if (!owner) throw new Error('account_required');
+    const path = await authService.uploadProfilePicture(file);
+    const current = getStoredUser();
+    if (current?.id !== owner || !current.profile) return;
+    storeUser({ ...current, profile: { ...current.profile, profile_picture: path } });
+    setState(prev => prev.user?.id === owner && prev.user.profile
+      ? { ...prev, user: { ...prev.user, profile: { ...prev.user.profile, profile_picture: path } } }
+      : prev);
+    setAvatarRevision(revision => revision + 1);
   }, []);
 
   // Clear error
@@ -233,6 +231,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Context value
   const value: AuthContextType = {
     ...state,
+    avatarUrl,
+    uploadProfilePicture,
     login,
     register,
     logout,
@@ -247,14 +247,3 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-
-// Hook to use auth context
-export function useAuth(): AuthContextType {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-}
-
-export default AuthContext;

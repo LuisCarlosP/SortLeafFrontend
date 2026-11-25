@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import AuthInput from '../AuthInput/AuthInput';
-import { useAuth } from '../../../context/AuthContext';
+import { useAuth } from '../../../context/auth-context';
+import ResendVerification from '../ResendVerification';
 import './LoginForm.css';
 
 interface LoginFormProps {
@@ -17,7 +18,7 @@ interface LoginFormProps {
 const translations = {
   es: {
     title: 'Iniciar Sesión',
-    subtitle: 'Bienvenido de vuelta a TrashIA',
+    subtitle: 'Bienvenido de vuelta a SortLeaf',
     email: 'Correo electrónico',
     emailPlaceholder: 'tu@email.com',
     password: 'Contraseña',
@@ -27,11 +28,12 @@ const translations = {
     loggingIn: 'Iniciando sesión...',
     noAccount: '¿No tienes cuenta?',
     register: 'Regístrate',
+    verifyFirst: 'Confirma tu correo para iniciar sesión.',
     genericError: 'Error al iniciar sesión. Verifica tus credenciales.',
   },
   en: {
     title: 'Sign In',
-    subtitle: 'Welcome back to TrashIA',
+    subtitle: 'Welcome back to SortLeaf',
     email: 'Email',
     emailPlaceholder: 'your@email.com',
     password: 'Password',
@@ -41,6 +43,7 @@ const translations = {
     loggingIn: 'Signing in...',
     noAccount: "Don't have an account?",
     register: 'Sign up',
+    verifyFirst: 'Confirm your email before signing in.',
     genericError: 'Login failed. Please check your credentials.',
   },
 };
@@ -51,12 +54,14 @@ export default function LoginForm({ language, onSuccess }: LoginFormProps) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [pendingEmail, setPendingEmail] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLocalError(null);
+    setPendingEmail(null);
     clearError();
     setIsLoading(true);
 
@@ -64,7 +69,12 @@ export default function LoginForm({ language, onSuccess }: LoginFormProps) {
       await login({ email, password });
       onSuccess?.();
     } catch (err) {
-      setLocalError(err instanceof Error ? err.message : t.genericError);
+      if (err instanceof Error && err.message === 'email_not_confirmed') {
+        setPendingEmail(email);
+        setLocalError(t.verifyFirst);
+      } else {
+        setLocalError(t.genericError);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -75,7 +85,7 @@ export default function LoginForm({ language, onSuccess }: LoginFormProps) {
   return (
     <form className="login-form" onSubmit={handleSubmit}>
       <div className="login-form-header">
-        <h2 className="login-title">{t.title}</h2>
+        <h1 className="login-title">{t.title}</h1>
         <p className="login-subtitle">{t.subtitle}</p>
       </div>
 
@@ -85,13 +95,15 @@ export default function LoginForm({ language, onSuccess }: LoginFormProps) {
         </div>
       )}
 
+      {pendingEmail && <ResendVerification key={pendingEmail} email={pendingEmail} language={language} />}
+
       <div className="login-form-fields">
         <AuthInput
           label={t.email}
           type="email"
           placeholder={t.emailPlaceholder}
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => { setEmail(e.target.value); setPendingEmail(null); setLocalError(null); clearError(); }}
           icon={faEnvelope}
           required
           autoComplete="email"

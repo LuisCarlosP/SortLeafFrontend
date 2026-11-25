@@ -1,0 +1,167 @@
+/* SortLeaf · Identity v1 · 2026-11-08
+ * Standalone brand tokens. The existing application does not import this file.
+ * Fonts are self-hosted separately; declare @font-face with font-display: swap.
+ * Theme: place data-sl-theme="dark" on a container or the document element.
+ */
+
+:root,
+[data-sl-theme="light"] {
+  /* Brand primitives */
+  --sl-ink: #152c26;
+  --sl-forest: #215c45;
+  --sl-paper: #f7f8f2;
+  --sl-white: #ffffff;
+  --sl-lime: #d6f66b;
+  --sl-iris: #6555a6;
+
+  /* Semantic colors: use these in components. */
+  --sl-color-background: var(--sl-paper);
+  --sl-color-surface: var(--sl-white);
+  --sl-color-surface-soft: #edf2e8;
+  --sl-color-text: var(--sl-ink);
+  --sl-color-text-muted: #52665d;
+  --sl-color-primary: var(--sl-forest);
+  --sl-color-primary-hover: #174632;
+  --sl-color-on-primary: var(--sl-white);
+  --sl-color-secondary: var(--sl-iris);
+  --sl-color-on-secondary: var(--sl-white);
+  --sl-color-accent: var(--sl-lime);
+  --sl-color-on-accent: var(--sl-ink);
+  --sl-color-link: var(--sl-forest);
+
+  /* Decorative separators are NOT the only boundary of an input or control. */
+  --sl-color-border-subtle: #dce4d8;
+  --sl-color-border-control: #74867a;
+  --sl-color-focus: var(--sl-iris);
+  --sl-color-focus-offset: var(--sl-color-background);
+
+  /* Pair status color and surface; always include a label and/or icon. */
+  --sl-color-success: #236846;
+  --sl-color-success-surface: #eaf4ec;
+  --sl-color-error: #b6383c;
+  --sl-color-error-surface: #fcecee;
+  --sl-color-info: #4b5fad;
+  --sl-color-info-surface: #eef0fa;
+
+  --sl-shadow-sm: 0 2px 8px rgb(21 44 38 / 5%);
+  --sl-shadow-md: 0 8px 28px rgb(21 44 38 / 8%);
+  --sl-shadow-lg: 0 20px 56px rgb(21 44 38 / 12%);
+}
+
+:root {
+  /* Two OFL families only. The wordmark is delivered as vector paths. */
+  --sl-font-display: "Outfit", system-ui, sans-serif;
+  --sl-font-body: "Manrope", system-ui, sans-serif;
+  --sl-font-weight-regular: 400;
+  --sl-font-weight-medium: 500;
+  --sl-font-weight-semibold: 600;
+  --sl-font-weight-bold: 700;
+
+  /* rem values respect the user's text-size preference. */
+  --sl-text-caption: 0.75rem;
+  --sl-text-small: 0.875rem;
+  --sl-text-body: 1rem;
+  --sl-text-lead: 1.125rem;
+  --sl-text-title-sm: 1.5rem;
+  --sl-text-title-md: 2rem;
+  --sl-text-title-lg: clamp(2rem, 1.5rem + 2vw, 3rem);
+  --sl-text-display: clamp(2.5rem, 1.75rem + 3vw, 4rem);
+  --sl-line-height-display: 1.08;
+  --sl-line-height-heading: 1.2;
+  --sl-line-height-body: 1.65;
+  --sl-line-height-label: 1.4;
+  --sl-letter-spacing-display: -0.035em;
+  --sl-letter-spacing-heading: -0.02em;
+  --sl-letter-spacing-body: 0;
+
+  /* Spacing: 4px unit at the default 16px root size. */
+  --sl-space-0: 0;
+  --sl-space-1: 0.25rem;
+  --sl-space-2: 0.5rem;
+  --sl-space-3: 0.75rem;
+  --sl-space-4: 1rem;
+  --sl-space-5: 1.25rem;
+  --sl-space-6: 1.5rem;
+  --sl-space-8: 2rem;
+  --sl-space-10: 2.5rem;
+  --sl-space-12: 3rem;
+  --sl-space-16: 4rem;
+  --sl-space-20: 5rem;
+  --sl-space-24: 6rem;
+
+  --sl-radius-sm: 0.5rem;
+  --sl-radius-md: 0.75rem;
+  --sl-radius-lg: 1.25rem;
+  --sl-radius-xl: 1.75rem;
+  --sl-radius-pill: 999px;
+  --sl-border-width: 1px;
+  --sl-focus-width: 3px;
+  --sl-focus-offset: 3px;
+
+  --sl-container-max: 75rem;
+  --sl-reading-max: 68ch;
+  --sl-gutter: clamp(1.25rem, 4vw, 3rem);
+  --sl-section-gap: clamp(3rem, 8vw, 6rem);
+  --sl-touch-target: 2.75rem;
+
+  /* Documentation tokens. CSS var() cannot be used in native @media queries.
+   * Use literal values: 480px, 768px, 1024px and 1440px.
+   * Start from the 360px layout; enhance at these content-driven thresholds.
+   */
+  --sl-breakpoint-sm: 480px;
+  --sl-breakpoint-md: 768px;
+  --sl-breakpoint-lg: 1024px;
+  --sl-breakpoint-xl: 1440px;
+
+  --sl-duration-fast: 120ms;
+  --sl-duration-base: 180ms;
+  --sl-duration-slow: 280ms;
+  --sl-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --sl-motion-distance: 0.5rem;
+  --sl-scroll-behavior: smooth;
+
+  --sl-z-base: 0;
+  --sl-z-sticky: 10;
+  --sl-z-overlay: 20;
+  --sl-z-dialog: 30;
+  --sl-z-toast: 40;
+}
+
+[data-sl-theme="dark"] {
+  --sl-color-background: #11251f;
+  --sl-color-surface: #1b332b;
+  --sl-color-surface-soft: #234237;
+  --sl-color-text: var(--sl-paper);
+  --sl-color-text-muted: #b6c9bc;
+  --sl-color-primary: var(--sl-lime);
+  --sl-color-primary-hover: #c5e65d;
+  --sl-color-on-primary: var(--sl-ink);
+  --sl-color-secondary: #c7b5f1;
+  --sl-color-on-secondary: var(--sl-ink);
+  --sl-color-accent: var(--sl-lime);
+  --sl-color-on-accent: var(--sl-ink);
+  --sl-color-link: var(--sl-lime);
+  --sl-color-border-subtle: #395648;
+  --sl-color-border-control: #7a9184;
+  --sl-color-focus: #c7b5f1;
+  --sl-color-focus-offset: var(--sl-color-background);
+  --sl-color-success: #b8e3c4;
+  --sl-color-success-surface: #163d2d;
+  --sl-color-error: #ffbfc0;
+  --sl-color-error-surface: #4a2429;
+  --sl-color-info: #c5d0ff;
+  --sl-color-info-surface: #222d50;
+  --sl-shadow-sm: 0 2px 8px rgb(0 0 0 / 12%);
+  --sl-shadow-md: 0 8px 28px rgb(0 0 0 / 18%);
+  --sl-shadow-lg: 0 20px 56px rgb(0 0 0 / 24%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --sl-duration-fast: 0ms;
+    --sl-duration-base: 0ms;
+    --sl-duration-slow: 0ms;
+    --sl-motion-distance: 0rem;
+    --sl-scroll-behavior: auto;
+  }
+}

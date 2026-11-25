@@ -1,1 +1,1 @@
-export { default } from './ScannerPage'
+export { default } from "./ScannerPage";

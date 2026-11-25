@@ -1,6 +1,6 @@
-# TrashIA Frontend
+# SortLeaf Frontend
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/LuisCarlosP/TrashIA)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/LuisCarlosP/SortLeafFrontend)
 
 React + TypeScript web application for AI-powered waste classification. Features an intuitive interface for image classification, interactive recycling maps, barcode scanning, and a virtual recycling assistant.
 
@@ -31,17 +31,17 @@ React + TypeScript web application for AI-powered waste classification. Features
 
 ## Requirements
 
-- Node.js 18+
+- Node.js 22.12+
 - npm or yarn
-- TrashIA Backend running (for API)
+- SortLeaf Backend running (for API)
 
 
 ## Installation
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/LuisCarlosP/TrashIA.git
-cd TrashIA/TrashIAFrontend
+git clone https://github.com/LuisCarlosP/SortLeafFrontend.git
+cd SortLeafFrontend
 ```
 
 ### 2. Install dependencies
@@ -54,18 +54,20 @@ Create a `.env.local` file in the root directory:
 
 ```env
 VITE_API_URL=http://localhost:8000
-VITE_API_KEY=your_secret_api_key
+VITE_API_KEY=local_development_key
 VITE_EMAILJS_SERVICE_ID=your_service_id
 VITE_EMAILJS_TEMPLATE_ID=your_template_id
 VITE_EMAILJS_PUBLIC_KEY=your_public_key
 ```
+
+Use a development-only key in this local setup. For Vercel, configure the server-side `API_KEY` described below.
 
 ### 4. Run development server
 ```bash
 npm run dev
 ```
 
-Available at `http://localhost:5173`
+Available at `http://localhost:5173/`
 
 
 ## Build
@@ -74,22 +76,24 @@ Available at `http://localhost:5173`
 npm run build
 ```
 
-Build output is generated in the `dist/` folder.
+Build output is generated in the `docs/` folder.
 
 
 ## Deployment
+
+For Vercel, import `SortLeafFrontend` from `main` with the root directory set to `./`. The deployment configuration installs dependencies with `npm ci`, runs `npm run build:vercel`, and publishes `docs/`. Set `BACKEND_URL` to the HTTPS origin of the Render API and `API_KEY` to its private server key. The browser calls `/api` on the same origin.
+
+For GitHub Pages:
 
 ```bash
 npm run deploy
 ```
 
-Deploys to GitHub Pages.
-
 
 ## Project Structure
 
 ```
-TrashIAFrontend/
+SortLeafFrontend/
 ├── index.html              # Entry HTML
 ├── package.json            # Dependencies
 ├── vite.config.ts          # Vite configuration
@@ -147,6 +151,7 @@ TrashIAFrontend/
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | POST | `/predict` | Classify waste image |
+| POST | `/chat/turn` | One conversation turn with text, an image, or both |
 | POST | `/chat/session` | Create chat session |
 | POST | `/chat/message` | Send chat message |
 | GET | `/chat/history/{session_id}` | Get chat history |
@@ -168,3 +173,7 @@ This project is available for viewing and educational purposes only. See the [LI
 **Luis Carlos Picado Rojas**
 
 - GitHub: [@LuisCarlosP](https://github.com/LuisCarlosP)
+
+The base URL defaults to the root. GitHub Pages uses the base path from its deployment configuration. Set `VITE_BASE_PATH=/` for root-domain hosting. Update canonical URLs, social metadata, sitemap and robots for a new domain. Every `VITE_*` value is client-visible; do not store server secrets in these variables.
+
+Contact uses the existing EmailJS integration and validates name, email, message and consent. Missing configuration or delivery errors are shown honestly; successful delivery must be confirmed against your real EmailJS configuration. The landing does not load analytics or advertising scripts.

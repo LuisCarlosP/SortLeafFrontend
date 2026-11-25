@@ -38,7 +38,7 @@ const HistoryItem = ({ record, language, dateLabel, onDelete, deleteTitle }: His
         <span className={`history-badge ${record.isRecyclable ? 'yes' : 'no'}`}>
           <FontAwesomeIcon icon={record.isRecyclable ? faRecycle : faTrash} />
         </span>
-        <span className="history-confidence">{Math.round(record.confidence * 100)}%</span>
+        <span className="history-confidence">{record.confidence === null ? '—' : Math.round(record.confidence * 100)}%</span>
         <span className="history-date">{dateLabel}</span>
         <button 
           className="history-delete-btn"

@@ -3,33 +3,63 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="./trashia-icon.svg">
+  <link rel="icon" type="image/svg+xml" href="%BASE_URL%brand/sortleaf/logos/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="%BASE_URL%brand/sortleaf/logos/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="%BASE_URL%brand/sortleaf/logos/apple-touch-icon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="description" content="TrashIA - Clasificador Inteligente de Residuos usando Inteligencia Artificial" />
-  <meta name="keywords" content="reciclaje, inteligencia artificial, clasificación de residuos, medio ambiente" />
+  <meta name="theme-color" content="#F7F8F2" />
+  <meta name="description" content="Identifica residuos con una foto y encuentra orientación para separar y reciclar. Clasificador, escáner, asistente y mapa de reciclaje gratuitos." />
+  <link rel="canonical" href="%VITE_SITE_URL%/" />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://luiscarlosp.github.io/TrashIAFrontend/" />
-  <meta property="og:title" content="TrashIA - Clasificador Inteligente de Residuos" />
+  <meta property="og:url" content="%VITE_SITE_URL%/" />
+  <meta property="og:title" content="SortLeaf — Tu guía gratuita para separar y reciclar" />
   <meta property="og:description"
-    content="Clasifica tus residuos de forma inteligente usando Inteligencia Artificial. Ayuda al medio ambiente con tecnología de vanguardia." />
-  <meta property="og:image" content="https://luiscarlosp.github.io/TrashIAFrontend/Preview.png" />
+    content="Identifica residuos con una foto y encuentra orientación para separar y reciclar. Clasificador, escáner, asistente y mapa de reciclaje gratuitos." />
+  <meta property="og:image" content="%VITE_SITE_URL%/images/sortleaf/og-sortleaf.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="SortLeaf. Cada residuo, un siguiente paso. Tu guía gratuita para separar y reciclar." />
 
-  <meta property="og:site_name" content="TrashIA" />
-  <meta property="og:locale" content="es_ES" />
+  <meta property="og:site_name" content="SortLeaf" />
+  <meta property="og:locale" content="es_CR" />
 
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="TrashIA - Clasificador Inteligente de Residuos" />
+  <meta name="twitter:title" content="SortLeaf — Tu guía gratuita para separar y reciclar" />
   <meta name="twitter:description"
-    content="Clasifica tus residuos de forma inteligente usando Inteligencia Artificial. Ayuda al medio ambiente con tecnología de vanguardia." />
-  <meta name="twitter:image" content="https://luiscarlosp.github.io/TrashIAFrontend/Preview.png" />
-  <meta name="twitter:image:alt" content="TrashIA - Clasificador Inteligente de Residuos con IA" />
+    content="Identifica residuos con una foto y encuentra orientación para separar y reciclar. Clasificador, escáner, asistente y mapa de reciclaje gratuitos." />
+  <meta name="twitter:image" content="%VITE_SITE_URL%/images/sortleaf/og-sortleaf.png" />
+  <meta name="twitter:image:alt" content="SortLeaf. Cada residuo, un siguiente paso. Tu guía gratuita para separar y reciclar." />
 
-  <title>TrashIA - Clasificador Inteligente de Residuos</title>
+  <title>SortLeaf — Tu guía gratuita para separar y reciclar</title>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "@id": "%VITE_SITE_URL%/#application",
+      "name": "SortLeaf",
+      "url": "%VITE_SITE_URL%/",
+      "description": "Identifica residuos con una foto y encuentra orientación para separar y reciclar. Clasificador, escáner, asistente y mapa de reciclaje gratuitos.",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Web",
+      "inLanguage": ["es", "en"],
+      "isAccessibleForFree": true,
+      "image": "%VITE_SITE_URL%/images/sortleaf/og-sortleaf.png",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Clasificación de residuos mediante imágenes",
+        "Consulta de productos por código de barras",
+        "Asistente de orientación sobre reciclaje",
+        "Mapa de puntos de reciclaje"
+      ]
+    }
+  </script>
   <script type="text/javascript">
     (function(l) {
       if (l.search[1] === '/' ) {

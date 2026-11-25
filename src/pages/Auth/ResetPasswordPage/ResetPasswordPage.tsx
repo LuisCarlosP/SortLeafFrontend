@@ -9,9 +9,8 @@ import {
   faSpinner,
   faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons';
-import { AuthHeader, AuthInput, PasswordStrength } from '../../../components/auth';
-import { useAuth } from '../../../context/AuthContext';
-import PageBackground from '../../../components/common/PageBackground/PageBackground';
+import { AuthInput, PasswordStrength } from '../../../components/auth';
+import { useAuth } from '../../../context/auth-context';
 import '../LoginPage/LoginPage.css'; // Import base auth styles
 import './ResetPasswordPage.css';
 
@@ -92,7 +91,6 @@ export default function ResetPasswordPage({ language }: ResetPasswordPageProps) 
     const refresh = hashParams.get('refresh_token') || 
                     searchParams.get('refresh_token');
     
-    console.log('Reset password - token found:', !!token);
     setAccessToken(token);
     setRefreshToken(refresh);
     setIsCheckingToken(false);
@@ -102,9 +100,7 @@ export default function ResetPasswordPage({ language }: ResetPasswordPageProps) 
   if (isCheckingToken) {
     return (
       <div className="auth-page reset-password-page">
-        <PageBackground />
         <div className="auth-container">
-          <AuthHeader />
           <div className="reset-loading">
             <FontAwesomeIcon icon={faSpinner} spin className="loading-icon" />
           </div>
@@ -114,12 +110,10 @@ export default function ResetPasswordPage({ language }: ResetPasswordPageProps) 
   }
 
   // Invalid token
-  if (!accessToken) {
+  if (!accessToken || !refreshToken) {
     return (
       <div className="auth-page reset-password-page">
-        <PageBackground />
         <div className="auth-container">
-          <AuthHeader />
           <div className="reset-error">
             <p className="error-message">{t.invalidToken}</p>
             <button
@@ -159,12 +153,10 @@ export default function ResetPasswordPage({ language }: ResetPasswordPageProps) 
   if (isSuccess) {
     return (
       <div className="auth-page reset-password-page">
-        <PageBackground />
         <div className="auth-container">
-          <AuthHeader />
           <div className="reset-success">
             <FontAwesomeIcon icon={faCheckCircle} className="success-icon" />
-            <h2 className="success-title">{t.successTitle}</h2>
+            <h1 className="success-title">{t.successTitle}</h1>
             <p className="success-message">{t.successMessage}</p>
             <button
               className="btn btn-primary"
@@ -180,12 +172,10 @@ export default function ResetPasswordPage({ language }: ResetPasswordPageProps) 
 
   return (
     <div className="auth-page reset-password-page">
-      <PageBackground />
       <div className="auth-container">
-        <AuthHeader />
         <form className="reset-form" onSubmit={handleSubmit}>
           <div className="reset-form-header">
-            <h2 className="reset-title">{t.title}</h2>
+            <h1 className="reset-title">{t.title}</h1>
             <p className="reset-subtitle">{t.subtitle}</p>
           </div>
 

@@ -1,5 +1,5 @@
 /**
- * Authentication Types for TrashIA Frontend
+ * Authentication Types for SortLeaf Frontend
  * Aligned with backend Supabase Auth models
  */
 
@@ -13,7 +13,6 @@ export interface RegisterRequest {
   email: string;
   password: string;
   telephone?: string;
-  profile_picture?: string;
 }
 
 export interface LoginRequest {
@@ -42,7 +41,7 @@ export interface UpdateProfileRequest {
   name?: string;
   last_name?: string;
   telephone?: string;
-  profile_picture?: string;
+  profile_picture?: null;
 }
 
 // ============================================
@@ -54,7 +53,7 @@ export interface UserProfile {
   name: string;
   last_name: string;
   telephone?: string;
-  profile_picture?: string;
+  profile_picture?: string | null;
   created_at?: string;
 }
 
@@ -97,6 +96,8 @@ export interface AuthState {
 }
 
 export interface AuthContextType extends AuthState {
+  avatarUrl: string | null;
+  uploadProfilePicture: (file: File) => Promise<void>;
   login: (credentials: LoginRequest) => Promise<void>;
   register: (userData: RegisterRequest) => Promise<void>;
   logout: () => Promise<void>;

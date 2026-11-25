@@ -1,0 +1,57 @@
+.sl-camera-dialog {
+  width: min(640px, calc(100% - 30px));
+  max-height: calc(100dvh - 30px);
+  margin: auto;
+  border: 1px solid #cbd9c1;
+  border-radius: 16px;
+  background: var(--sl-paper);
+  color: var(--sl-ink);
+  padding: 24px;
+  overflow-y: auto;
+}
+.sl-camera-dialog::backdrop {
+  background: #10251dd9;
+}
+.sl-camera-dialog__heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+.sl-camera-dialog h2 {
+  font-family: var(--sl-font-display);
+  font-weight: 500;
+  font-size: 1.5rem;
+}
+.sl-camera-dialog > p {
+  font-size: 0.875rem;
+  color: var(--sl-color-text-muted);
+  line-height: 1.7;
+}
+.sl-camera-dialog__view {
+  position: relative;
+  aspect-ratio: 4/3;
+  background: #18372b;
+  border-radius: 9px;
+  overflow: hidden;
+  margin-block: 20px;
+  display: grid;
+  place-content: center;
+  color: white;
+}
+.sl-camera-dialog__view video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: absolute;
+  inset: 0;
+}
+.sl-camera-dialog > .sl-app-button {
+  width: 100%;
+}
+.sl-camera-dialog .sl-app-alert {
+  margin-bottom: 15px;
+}
+
+@media (max-width: 767px) { .sl-camera-dialog { padding: 18px; } }
+

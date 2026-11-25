@@ -3,9 +3,8 @@
  */
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthHeader, RegisterForm } from '../../../components/auth';
-import { useAuth } from '../../../context/AuthContext';
-import PageBackground from '../../../components/common/PageBackground/PageBackground';
+import { RegisterForm } from '../../../components/auth';
+import { useAuth } from '../../../context/auth-context';
 import { Loading } from '../../../components/common/LoadingError/LoadingError';
 import './RegisterPage.css';
 
@@ -33,9 +32,7 @@ export default function RegisterPage({ language }: RegisterPageProps) {
 
   return (
     <div className="auth-page register-page">
-      <PageBackground />
       <div className="auth-container auth-container-wide">
-        <AuthHeader />
         <RegisterForm language={language} />
       </div>
     </div>

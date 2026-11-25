@@ -1,3 +1,4 @@
+import { chatHeaders } from "./chat-access";
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const API_KEY = import.meta.env.VITE_API_KEY || '';
 
@@ -87,7 +88,7 @@ export const createChatSession = async (request: CreateSessionRequest): Promise<
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-API-Key': API_KEY,
+      ...await chatHeaders(),
     },
     body: JSON.stringify(request),
   });
@@ -105,7 +106,7 @@ export const sendChatMessage = async (request: SendMessageRequest): Promise<Chat
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-API-Key': API_KEY,
+      ...await chatHeaders(),
     },
     body: JSON.stringify(request),
   });
@@ -121,7 +122,7 @@ export const sendChatMessage = async (request: SendMessageRequest): Promise<Chat
 export const getChatHistory = async (sessionId: string): Promise<ChatHistoryResponse> => {
   const response = await fetch(`${API_URL}/chat/history/${sessionId}`, {
     headers: {
-      'X-API-Key': API_KEY,
+      ...await chatHeaders(),
     },
   });
 
@@ -137,11 +138,11 @@ export const deleteChatSession = async (sessionId: string): Promise<void> => {
   const response = await fetch(`${API_URL}/chat/session/${sessionId}`, {
     method: 'DELETE',
     headers: {
-      'X-API-Key': API_KEY,
+      ...await chatHeaders(),
     },
   });
 
-  if (!response.ok) {
+  if (!response.ok && response.status !== 404) {
     const errorData = await response.json();
     throw new Error(errorData.detail || 'Error al eliminar sesión');
   }
@@ -152,7 +153,7 @@ export const updateMaterialContext = async (request: UpdateMaterialRequest): Pro
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      'X-API-Key': API_KEY,
+      ...await chatHeaders(),
     },
     body: JSON.stringify(request),
   });
