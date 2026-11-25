@@ -25,3 +25,13 @@ it("uses the account session without creating a guest", async () => {
   expect((await chatHeaders()).Authorization).toBe("Bearer member");
   expect(fetcher).not.toHaveBeenCalled();
 });
+
+it.each([[503, "guest"], [429, "rate"]])("can retry after a guest request returns %i", async (status, code) => {
+  const fetcher = vi.fn()
+    .mockResolvedValueOnce(new Response(null, { status: Number(status) }))
+    .mockResolvedValueOnce(Response.json({ access_token: "guest", refresh_token: "refresh" }));
+  vi.stubGlobal("fetch", fetcher);
+  await expect(chatHeaders()).rejects.toMatchObject({ code });
+  expect((await chatHeaders()).Authorization).toBe("Bearer guest");
+  expect(fetcher).toHaveBeenCalledTimes(2);
+});

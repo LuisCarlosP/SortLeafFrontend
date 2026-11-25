@@ -5,6 +5,15 @@ export const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 const GUEST_KEY = "sortleaf_guest_session";
 let acquiring: Promise<Tokens> | undefined;
 
+export class ConversationApiError extends Error {
+  readonly code: string;
+
+  constructor(code: string) {
+    super(code);
+    this.code = code;
+  }
+}
+
 export function hasChatSession(): boolean {
   return Boolean(getStoredTokens()?.access_token || localStorage.getItem(GUEST_KEY));
 }
@@ -23,7 +32,7 @@ async function getGuest(): Promise<Tokens> {
       localStorage.removeItem(GUEST_KEY);
       window.dispatchEvent(new Event("sortleaf-guest-ended"));
     }
-    throw new Error("guest_session_unavailable");
+    throw new ConversationApiError(response.status === 429 ? "rate" : "guest");
   }
   const session: Tokens = await response.json();
   localStorage.setItem(GUEST_KEY, JSON.stringify(session));

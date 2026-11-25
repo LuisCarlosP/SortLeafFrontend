@@ -89,7 +89,7 @@ function RouteMetadata({ language }: LanguageProps): null {
 
 interface AppFrameProps extends LanguageProps { children: ReactNode; onToggleLanguage: () => void }
 function AppFrame({ language, children, onToggleLanguage }: AppFrameProps): ReactElement {
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
   const { user, isAuthenticated, isLoading } = useAuth()
   const scope = isAuthenticated && user ? user.id : "guest"
   useLayoutEffect(() => { if (!isLoading) resetConversationOwner(scope) }, [isLoading, scope])
@@ -107,6 +107,9 @@ function AppFrame({ language, children, onToggleLanguage }: AppFrameProps): Reac
       window.removeEventListener("storage", onStorage);
     };
   }, [scope]);
+  if (pathname === '/' && new URLSearchParams(hash.slice(1)).get('type') === 'recovery') {
+    return <Navigate to={{ pathname: '/auth/reset-password', hash }} replace />
+  }
   if (pathname.startsWith('/auth')) return <AuthLayout language={language} onToggleLanguage={onToggleLanguage}>{children}</AuthLayout>
   if (['/assistant', '/map', '/scanner', '/stats', '/profile'].includes(pathname) || (VISION_LAB_ENABLED && pathname === '/vision-lab')) {
     if (isLoading) return <main aria-busy="true" />

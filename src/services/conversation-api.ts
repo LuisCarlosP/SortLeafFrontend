@@ -1,4 +1,4 @@
-import { chatHeaders } from "./chat-access";
+import { chatHeaders, ConversationApiError } from "./chat-access";
 import type { VisualContext } from "../features/vision/analysis-schema";
 import type { Language } from "../translations";
 import type { PredictionResponse } from "./Classifier";
@@ -22,13 +22,7 @@ interface ConversationTurnRequest {
   signal: AbortSignal;
 }
 
-export class ConversationApiError extends Error {
-  code: string;
-  constructor(code: string) {
-    super(code);
-    this.code = code;
-  }
-}
+export { ConversationApiError };
 
 export async function sendConversationTurn(
   request: ConversationTurnRequest,

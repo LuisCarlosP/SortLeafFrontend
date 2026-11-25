@@ -52,6 +52,7 @@ export const WORKSPACE_CONTENT = {
     cameraTitle: "Muestra un solo residuo",
     cameraHint: "Busca buena luz y procura que el objeto se vea completo.",
     errors: {
+      guest: "No pudimos abrir tu sesión privada de chat. Vuelve a enviar el mensaje en un momento.",
       local: "Se interrumpió la IA local. Activa el modelo y vuelve a intentar el mensaje.",
       network:
         "No pudimos conectar con SortLeaf. Comprueba tu conexión e inténtalo de nuevo.",
@@ -128,6 +129,7 @@ export const WORKSPACE_CONTENT = {
     cameraTitle: "Show one item",
     cameraHint: "Find good lighting and keep the entire item in view.",
     errors: {
+      guest: "We couldn’t open your private chat session. Try sending your message again in a moment.",
       local: "Local AI stopped. Activate the model and retry your message.",
       network:
         "We could not connect to SortLeaf. Check your connection and try again.",

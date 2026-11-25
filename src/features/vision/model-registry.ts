@@ -1,5 +1,5 @@
 export type VisionModelKey = "smol-256m" | "smol-500m";
-export const VISION_LAB_ENABLED = import.meta.env?.DEV || import.meta.env?.VITE_ENABLE_VISION_LAB === "true";
+export const VISION_LAB_ENABLED = import.meta.env?.VITE_ENABLE_VISION_LAB !== "false";
 export const VISION_CACHE_NAME = "sortleaf-vision-models-v1";
 
 export interface VisionModelDefinition {
