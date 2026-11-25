@@ -13,7 +13,7 @@ import {
   faBarcode
 } from '@fortawesome/free-solid-svg-icons'
 import type { Language } from '../../../translations'
-import trashiaIconWhite from '../../../assets/trashia-icon-white.svg'
+import sortleafIconWhite from '../../../assets/sortleaf-icon-white.svg'
 import { UserMenu } from '../../auth'
 
 interface HeaderProps {
@@ -49,7 +49,7 @@ export default function Header({ language, onToggleLanguage, t }: HeaderProps) {
       <div className="header-container">
         {/* Logo */}
         <Link to="/" className="header-logo" onClick={closeMenu}>
-          <img src={trashiaIconWhite} alt="TrashIA Logo" className="logo-icon-svg" />
+          <img src={sortleafIconWhite} alt="SortLeaf Logo" className="logo-icon-svg" />
           <span className="logo-text">{t.appTitle}</span>
         </Link>
 
@@ -63,8 +63,8 @@ export default function Header({ language, onToggleLanguage, t }: HeaderProps) {
             <span>{t.navHome}</span>
           </Link>
           <Link
-            to="/trashia"
-            className={`nav-link ${isActive('/trashia') ? 'active' : ''}`}
+            to="/assistant"
+            className={`nav-link ${isActive('/assistant') ? 'active' : ''}`}
           >
             <FontAwesomeIcon icon={faCamera} />
             <span>{t.navClassifier}</span>
@@ -124,8 +124,8 @@ export default function Header({ language, onToggleLanguage, t }: HeaderProps) {
           <span>{t.navHome}</span>
         </Link>
         <Link
-          to="/trashia"
-          className={`nav-mobile-link ${isActive('/trashia') ? 'active' : ''}`}
+          to="/assistant"
+          className={`nav-mobile-link ${isActive('/assistant') ? 'active' : ''}`}
           onClick={closeMenu}
         >
           <FontAwesomeIcon icon={faCamera} />

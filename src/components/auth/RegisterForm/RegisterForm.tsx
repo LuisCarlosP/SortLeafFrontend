@@ -24,7 +24,7 @@ interface RegisterFormProps {
 const translations = {
   es: {
     title: 'Crear Cuenta',
-    subtitle: 'Únete a la comunidad TrashIA',
+    subtitle: 'Únete a la comunidad SortLeaf',
     name: 'Nombre',
     namePlaceholder: 'Tu nombre',
     lastName: 'Apellido',
@@ -50,7 +50,7 @@ const translations = {
   },
   en: {
     title: 'Create Account',
-    subtitle: 'Join the TrashIA community',
+    subtitle: 'Join the SortLeaf community',
     name: 'First Name',
     namePlaceholder: 'Your first name',
     lastName: 'Last Name',

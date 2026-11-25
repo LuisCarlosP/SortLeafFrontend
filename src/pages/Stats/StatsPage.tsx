@@ -78,7 +78,7 @@ const StatsPage = ({ language, t }: StatsPageProps) => {
             </div>
             <h2>{t.noHistory}</h2>
             <p>{t.statsSubtitle}</p>
-            <Link to="/trashia" className="btn-primary">
+            <Link to="/assistant" className="btn-primary">
               <FontAwesomeIcon icon={faCamera} />
               {t.startClassifying}
             </Link>

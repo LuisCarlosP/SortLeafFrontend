@@ -73,7 +73,7 @@ export default function HomePage({ t }: HomePageProps) {
           <p className="hero-description">{t.heroDescription}</p>
           
           <div className="hero-buttons">
-            <Link to="/trashia" className="btn btn-primary">
+            <Link to="/assistant" className="btn btn-primary">
               <FontAwesomeIcon icon={faCamera} />
               {t.startClassifying}
             </Link>
@@ -146,7 +146,7 @@ export default function HomePage({ t }: HomePageProps) {
       <section className="cta-section">
         <h2>{t.ctaTitle}</h2>
         <p>{t.ctaSubtitle}</p>
-        <Link to="/trashia" className="btn btn-cta">
+        <Link to="/assistant" className="btn btn-cta">
           <FontAwesomeIcon icon={faCamera} />
           {t.ctaButton}
         </Link>

@@ -36,8 +36,8 @@ const ENVIRONMENTAL_IMPACT = {
 // CO2 absorbed by one tree per year (in kg)
 const CO2_PER_TREE_PER_YEAR = 22;
 
-const HISTORY_KEY = 'trashia_history';
-const STATS_KEY = 'trashia_stats';
+const HISTORY_KEY = 'sortleaf_history';
+const STATS_KEY = 'sortleaf_stats';
 const MAX_RECORDS = 100;
 const MAX_IMAGE_SIZE = 50; // Thumbnail size in pixels
 

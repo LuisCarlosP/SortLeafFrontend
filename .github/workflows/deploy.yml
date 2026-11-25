@@ -35,7 +35,7 @@ jobs:
       - name: Create .env.production with secrets
         run: |
           cat > .env.production << EOF
-          VITE_API_URL=https://trashia.onrender.com
+          VITE_API_URL=${{ vars.VITE_API_URL }}
           VITE_EMAILJS_SERVICE_ID=${{ secrets.EMAILJS_SERVICE_ID }}
           VITE_EMAILJS_TEMPLATE_ID=${{ secrets.EMAILJS_TEMPLATE_ID }}
           VITE_EMAILJS_PUBLIC_KEY=${{ secrets.EMAILJS_PUBLIC_KEY }}

@@ -1,5 +1,5 @@
 /**
- * Authentication Types for TrashIA Frontend
+ * Authentication Types for SortLeaf Frontend
  * Aligned with backend Supabase Auth models
  */
 
