@@ -1,5 +1,5 @@
 /**
- * Authentication Service for TrashIA
+ * Authentication Service for SortLeaf
  * Handles API calls and token management
  */
 import type {

@@ -71,7 +71,7 @@ function App() {
 
   return (
     <AuthProvider>
-      <Router basename="/TrashIAFrontend">
+      <Router basename="/SortLeafFrontend">
         <div className="app">
           <Header
             language={language}
@@ -92,7 +92,7 @@ function App() {
           <Suspense fallback={<Loading message="Cargando..." />}>
             <Routes>
               <Route path="/" element={<HomePage t={t} />} />
-              <Route path="/trashia" element={<ClassifierPage language={language} t={t} />} />
+              <Route path="/assistant" element={<ClassifierPage language={language} t={t} />} />
               <Route path="/map" element={<RecyclingMap t={t} />} />
               <Route path="/stats" element={<StatsPage language={language} t={t} />} />
               <Route path="/scanner" element={<ScannerPage t={t} lang={language} />} />

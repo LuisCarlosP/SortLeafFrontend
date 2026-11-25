@@ -17,7 +17,7 @@ interface LoginFormProps {
 const translations = {
   es: {
     title: 'Iniciar Sesión',
-    subtitle: 'Bienvenido de vuelta a TrashIA',
+    subtitle: 'Bienvenido de vuelta a SortLeaf',
     email: 'Correo electrónico',
     emailPlaceholder: 'tu@email.com',
     password: 'Contraseña',
@@ -31,7 +31,7 @@ const translations = {
   },
   en: {
     title: 'Sign In',
-    subtitle: 'Welcome back to TrashIA',
+    subtitle: 'Welcome back to SortLeaf',
     email: 'Email',
     emailPlaceholder: 'your@email.com',
     password: 'Password',

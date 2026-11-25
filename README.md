@@ -1,6 +1,6 @@
-# TrashIA Frontend
+# SortLeaf Frontend
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/LuisCarlosP/TrashIA)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/LuisCarlosP/SortLeafFrontend)
 
 React + TypeScript web application for AI-powered waste classification. Features an intuitive interface for image classification, interactive recycling maps, barcode scanning, and a virtual recycling assistant.
 
@@ -33,15 +33,15 @@ React + TypeScript web application for AI-powered waste classification. Features
 
 - Node.js 18+
 - npm or yarn
-- TrashIA Backend running (for API)
+- SortLeaf Backend running (for API)
 
 
 ## Installation
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/LuisCarlosP/TrashIA.git
-cd TrashIA/TrashIAFrontend
+git clone https://github.com/LuisCarlosP/SortLeafFrontend.git
+cd SortLeafFrontend
 ```
 
 ### 2. Install dependencies
@@ -89,7 +89,7 @@ Deploys to GitHub Pages.
 ## Project Structure
 
 ```
-TrashIAFrontend/
+SortLeafFrontend/
 ├── index.html              # Entry HTML
 ├── package.json            # Dependencies
 ├── vite.config.ts          # Vite configuration

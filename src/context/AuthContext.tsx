@@ -1,5 +1,5 @@
 /**
- * Authentication Context for TrashIA
+ * Authentication Context for SortLeaf
  * Provides global auth state and methods
  */
 import {
